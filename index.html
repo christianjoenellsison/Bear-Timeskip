@@ -12,6 +12,12 @@
       background: url('https://www.pixelstalk.net/wp-content/uploads/2016/10/Wallpapers-HD-Forest.jpg') no-repeat center center fixed;
       background-size: cover;
       line-height: 1.6;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    body.dark {
+      background: #121212 !important;
+      color: #f1f1f1;
     }
 
     nav {
@@ -62,7 +68,7 @@
       perspective: 1000px;
     }
     .card:hover {
-      transform: rotateY(500deg) scale(1.02);
+      transform: rotateY(50deg) scale(1.02);
     }
     .card img, .card video {
       width: 100%;
@@ -126,6 +132,19 @@
       background: #336699;
     }
 
+    #scrollTopBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #336699;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+    }
+
     @media (max-width: 600px) {
       nav h1 {
         font-size: 1.2rem;
@@ -146,21 +165,21 @@
       <li><a href="#sloth">Sloth</a></li>
       <li><a href="#asian">Asian Black</a></li>
     </ul>
+    <button onclick="toggleDarkMode()">🌙 Dark Mode</button>
   </nav>
 
   <div class="container">
     <div class="card" id="polar">
-      <img src="https://images.pexels.com/photos/53425/polar-bear-arctic-wildlife-snow-53425.jpeg" alt="Polar Bear">
+      <img id="slideshow" src="https://images.pexels.com/photos/53425/polar-bear-arctic-wildlife-snow-53425.jpeg" alt="Polar Bear">
       <h2>Polar Bear</h2>
-      <a href="https://images.pexels.com/photos/53425/polar-bear-arctic-wildlife-snow-53425.jpeg">View Image</a>
-      <p>The polar bear is a large bear native to the Arctic and nearby areas. It is closely related to the brown bear, and the two species can interbreed. The polar bear is the largest extant species of bear and land carnivore by body mass, with adult males weighing 300–800 kg.</p>
+      <button onclick="toggleFact('polarFact')">Show/Hide Fact</button>
+      <p id="polarFact" style="display:none;">Polar bears can swim for days at a time to find food.</p>
     </div>
 
     <div class="card" id="grizzly">
       <img src="https://images.pexels.com/photos/162340/bear-bavarian-bear-wild-brown-bear-162340.jpeg" alt="Grizzly Bear">
       <h2>Grizzly Bear</h2>
-      <a href="https://images.pexels.com/photos/162340/bear-bavarian-bear-wild-brown-bear-162340.jpeg">View Image</a>
-      <p>The grizzly bear, also known as the North American brown bear or simply grizzly, is a population or subspecies of the brown bear inhabiting North America. In addition to the mainland grizzly, other morphological forms of brown bear in North America are sometimes identified as grizzly bears.</p>
+      <p>Grizzlies are strong enough to crush bowling balls with their jaws!</p>
     </div>
 
     <div class="card" id="panda">
@@ -168,34 +187,77 @@
         <source src="https://www.pexels.com/download/video/5254760/" type="video/mp4">
       </video>
       <h2>Panda</h2>
-      <a href="https://www.pexels.com/video/panda-sitting-with-bamboo-5254760/">View Video</a>
-      <p>The giant panda, also known as the panda bear or simply panda, is a bear species endemic to China. It is characterised by its white coat with black patches around the eyes, ears, legs and shoulders. Its body is rotund; adult individuals weigh 100 to 115 kg and are typically 1.2 to 1.9 m long.</p>
+      <p>Pandas spend 10–16 hours a day eating bamboo!</p>
     </div>
 
     <div class="card" id="sloth">
       <img src="https://images.pexels.com/photos/30830479/pexels-photo-30830479.jpeg" alt="Sloth Bear">
       <h2>Sloth Bear</h2>
-      <a href="https://images.pexels.com/photos/30830479/pexels-photo-30830479.jpeg">View Image</a>
-      <p>The sloth bear, also known as the Indian bear, is a myrmecophagous bear species native to the Indian subcontinent. It feeds on fruits, ants and termites. It is listed as vulnerable on the IUCN Red List, mainly because of habitat loss and degradation. It is the only species in the genus Melursus.</p>
+      <p>The Sloth Bear uses its lips like a vacuum to suck up insects.</p>
     </div>
 
     <div class="card" id="asian">
       <img src="https://images.pexels.com/photos/11361608/pexels-photo-11361608.jpeg" alt="Asian Black Bear">
       <h2>Asian Black Bear</h2>
-      <a href="https://images.pexels.com/photos/11361608/pexels-photo-11361608.jpeg">View Image</a>
-      <p>The Asian black bear, also known as the Asiatic black bear, moon bear and white-chested bear, is a medium-sized bear species native to Asia that is largely adapted to an arboreal lifestyle.</p>
+      <p>The Asian Black Bear is also known as the “Moon Bear” because of its chest marking.</p>
     </div>
   </div>
 
-  <form>
+  <form id="bearForm">
     <h3>Share Your Favorite Bear</h3>
     <label for="name">Name:</label>
-    <input type="text" id="name" placeholder="Your name">
+    <input type="text" id="name" placeholder="Your name" required>
     <label for="bear">Favorite Bear:</label>
-    <input type="text" id="bear" placeholder="e.g. Polar Bear">
+    <input type="text" id="bear" placeholder="e.g. Polar Bear" required>
     <label for="comment">Why do you like this bear?</label>
-    <textarea id="comment" rows="4"></textarea>
+    <textarea id="comment" rows="4" required></textarea>
     <button type="submit">Submit</button>
   </form>
+
+  <button id="scrollTopBtn" onclick="scrollToTop()">⬆</button>
+
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark");
+    }
+
+    document.getElementById("bearForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      let name = document.getElementById("name").value;
+      let bear = document.getElementById("bear").value;
+      let comment = document.getElementById("comment").value;
+      alert("Thanks " + name + "! You like " + bear + " because: " + comment);
+      this.reset();
+    });
+
+    let images = [
+      "https://images.pexels.com/photos/53425/polar-bear-arctic-wildlife-snow-53425.jpeg",
+      "https://www.stockholmviews.com/sigma_150-500_os/photos/polar_bear100.jpg",
+      "https://gifdb.com/images/high/polar-bear-cartoon-yawn-9e6iopl7k4r2pm2c.gif"
+    ];
+    let index = 0;
+    setInterval(() => {
+      index = (index + 1) % images.length;
+      document.getElementById("slideshow").src = images[index];
+    }, 3000);
+
+    function toggleFact(id) {
+      let fact = document.getElementById(id);
+      fact.style.display = fact.style.display === "none" ? "block" : "none";
+    }
+
+    window.onscroll = function() {
+    let btn = document.getElementById("scrollTopBtn");
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+      btn.style.display = "block";
+    } else {
+      btn.style.display = "none";
+    }
+  };
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  </script>
 </body>
 </html>
